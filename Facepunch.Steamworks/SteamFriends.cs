@@ -170,6 +170,8 @@ namespace Steamworks
 			return GetFriendsWithFlag( FriendFlags.RequestingFriendship );
 		}
 
+		public static string GetFriendPersonaName(SteamId id) => Internal.GetFriendPersonaName(id);
+
 		public static IEnumerable<Friend> GetPlayedWith()
 		{
 			for ( int i = 0; i < Internal.GetCoplayFriendCount(); i++ )
