@@ -15,9 +15,9 @@ namespace Steamworks
 			SetupInterface( IsGameServer );
 		}
 		
-		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_SteamNetworkingUtils_SteamAPI_v003", CallingConvention = Platform.CC)]
-		internal static extern IntPtr SteamAPI_SteamNetworkingUtils_SteamAPI_v003();
-		public override IntPtr GetGlobalInterfacePointer() => SteamAPI_SteamNetworkingUtils_SteamAPI_v003();
+		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_SteamNetworkingUtils_SteamAPI_v004", CallingConvention = Platform.CC)]
+		internal static extern IntPtr SteamAPI_SteamNetworkingUtils_SteamAPI_v004();
+		public override IntPtr GetGlobalInterfacePointer() => SteamAPI_SteamNetworkingUtils_SteamAPI_v004();
 		
 		
 		#region FunctionMeta
@@ -92,7 +92,7 @@ namespace Steamworks
 		#endregion
 		internal void ConvertPingLocationToString( ref NetPingLocation location, out string pszBuf )
 		{
-			IntPtr mempszBuf = Helpers.TakeMemory();
+			using var mempszBuf = Helpers.TakeMemory();
 			_ConvertPingLocationToString( Self, ref location, mempszBuf, (1024 * 32) );
 			pszBuf = Helpers.MemoryToString( mempszBuf );
 		}
@@ -367,24 +367,23 @@ namespace Steamworks
 		
 		#region FunctionMeta
 		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamNetworkingUtils_GetConfigValueInfo", CallingConvention = Platform.CC)]
-		[return: MarshalAs( UnmanagedType.I1 )]
-		private static extern bool _GetConfigValueInfo( IntPtr self, NetConfig eValue, [MarshalAs( UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof( Utf8StringToNative ) )] string pOutName, ref NetConfigType pOutDataType, [In,Out] NetConfigScope[]  pOutScope, [In,Out] NetConfig[]  pOutNextValue );
+		private static extern Utf8StringPointer _GetConfigValueInfo( IntPtr self, NetConfig eValue, ref NetConfigType pOutDataType, [In,Out] NetConfigScope[]  pOutScope );
 		
 		#endregion
-		internal bool GetConfigValueInfo( NetConfig eValue, [MarshalAs( UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof( Utf8StringToNative ) )] string pOutName, ref NetConfigType pOutDataType, [In,Out] NetConfigScope[]  pOutScope, [In,Out] NetConfig[]  pOutNextValue )
+		internal string GetConfigValueInfo( NetConfig eValue, ref NetConfigType pOutDataType, [In,Out] NetConfigScope[]  pOutScope )
 		{
-			var returnValue = _GetConfigValueInfo( Self, eValue, pOutName, ref pOutDataType, pOutScope, pOutNextValue );
+			var returnValue = _GetConfigValueInfo( Self, eValue, ref pOutDataType, pOutScope );
 			return returnValue;
 		}
 		
 		#region FunctionMeta
-		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamNetworkingUtils_GetFirstConfigValue", CallingConvention = Platform.CC)]
-		private static extern NetConfig _GetFirstConfigValue( IntPtr self );
+		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamNetworkingUtils_IterateGenericEditableConfigValues", CallingConvention = Platform.CC)]
+		private static extern NetConfig _IterateGenericEditableConfigValues( IntPtr self, NetConfig eCurrent, [MarshalAs( UnmanagedType.U1 )] bool bEnumerateDevVars );
 		
 		#endregion
-		internal NetConfig GetFirstConfigValue()
+		internal NetConfig IterateGenericEditableConfigValues( NetConfig eCurrent, [MarshalAs( UnmanagedType.U1 )] bool bEnumerateDevVars )
 		{
-			var returnValue = _GetFirstConfigValue( Self );
+			var returnValue = _IterateGenericEditableConfigValues( Self, eCurrent, bEnumerateDevVars );
 			return returnValue;
 		}
 		
@@ -395,7 +394,7 @@ namespace Steamworks
 		#endregion
 		internal void SteamNetworkingIPAddr_ToString( ref NetAddress addr, out string buf, [MarshalAs( UnmanagedType.U1 )] bool bWithPort )
 		{
-			IntPtr membuf = Helpers.TakeMemory();
+			using var membuf = Helpers.TakeMemory();
 			_SteamNetworkingIPAddr_ToString( Self, ref addr, membuf, (1024 * 32), bWithPort );
 			buf = Helpers.MemoryToString( membuf );
 		}
@@ -419,7 +418,7 @@ namespace Steamworks
 		#endregion
 		internal void SteamNetworkingIdentity_ToString( ref NetIdentity identity, out string buf )
 		{
-			IntPtr membuf = Helpers.TakeMemory();
+			using var membuf = Helpers.TakeMemory();
 			_SteamNetworkingIdentity_ToString( Self, ref identity, membuf, (1024 * 32) );
 			buf = Helpers.MemoryToString( membuf );
 		}

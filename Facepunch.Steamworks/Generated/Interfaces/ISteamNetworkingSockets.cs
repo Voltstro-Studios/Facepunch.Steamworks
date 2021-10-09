@@ -15,12 +15,12 @@ namespace Steamworks
 			SetupInterface( IsGameServer );
 		}
 		
-		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_SteamNetworkingSockets_SteamAPI_v009", CallingConvention = Platform.CC)]
-		internal static extern IntPtr SteamAPI_SteamNetworkingSockets_SteamAPI_v009();
-		public override IntPtr GetUserInterfacePointer() => SteamAPI_SteamNetworkingSockets_SteamAPI_v009();
-		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v009", CallingConvention = Platform.CC)]
-		internal static extern IntPtr SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v009();
-		public override IntPtr GetServerInterfacePointer() => SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v009();
+		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_SteamNetworkingSockets_SteamAPI_v011", CallingConvention = Platform.CC)]
+		internal static extern IntPtr SteamAPI_SteamNetworkingSockets_SteamAPI_v011();
+		public override IntPtr GetUserInterfacePointer() => SteamAPI_SteamNetworkingSockets_SteamAPI_v011();
+		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v011", CallingConvention = Platform.CC)]
+		internal static extern IntPtr SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v011();
+		public override IntPtr GetServerInterfacePointer() => SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v011();
 		
 		
 		#region FunctionMeta
@@ -143,7 +143,7 @@ namespace Steamworks
 		#endregion
 		internal bool GetConnectionName( Connection hPeer, out string pszName )
 		{
-			IntPtr mempszName = Helpers.TakeMemory();
+			using var mempszName = Helpers.TakeMemory();
 			var returnValue = _GetConnectionName( Self, hPeer, mempszName, (1024 * 32) );
 			pszName = Helpers.MemoryToString( mempszName );
 			return returnValue;
@@ -223,7 +223,7 @@ namespace Steamworks
 		#endregion
 		internal int GetDetailedConnectionStatus( Connection hConn, out string pszBuf )
 		{
-			IntPtr mempszBuf = Helpers.TakeMemory();
+			using var mempszBuf = Helpers.TakeMemory();
 			var returnValue = _GetDetailedConnectionStatus( Self, hConn, mempszBuf, (1024 * 32) );
 			pszBuf = Helpers.MemoryToString( mempszBuf );
 			return returnValue;
@@ -467,6 +467,16 @@ namespace Steamworks
 		{
 			var returnValue = _SetCertificate( Self, pCertificate, cbCertificate, ref errMsg );
 			return returnValue;
+		}
+		
+		#region FunctionMeta
+		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamNetworkingSockets_ResetIdentity", CallingConvention = Platform.CC)]
+		private static extern void _ResetIdentity( IntPtr self, ref NetIdentity pIdentity );
+		
+		#endregion
+		internal void ResetIdentity( ref NetIdentity pIdentity )
+		{
+			_ResetIdentity( Self, ref pIdentity );
 		}
 		
 		#region FunctionMeta

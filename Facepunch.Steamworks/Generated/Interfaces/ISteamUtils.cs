@@ -256,7 +256,7 @@ namespace Steamworks
 		#endregion
 		internal bool GetEnteredGamepadTextInput( out string pchText )
 		{
-			IntPtr mempchText = Helpers.TakeMemory();
+			using var mempchText = Helpers.TakeMemory();
 			var returnValue = _GetEnteredGamepadTextInput( Self, mempchText, (1024 * 32) );
 			pchText = Helpers.MemoryToString( mempchText );
 			return returnValue;
@@ -370,7 +370,7 @@ namespace Steamworks
 		#endregion
 		internal int FilterText( TextFilteringContext eContext, SteamId sourceSteamID, [MarshalAs( UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof( Utf8StringToNative ) )] string pchInputMessage, out string pchOutFilteredText )
 		{
-			IntPtr mempchOutFilteredText = Helpers.TakeMemory();
+			using var mempchOutFilteredText = Helpers.TakeMemory();
 			var returnValue = _FilterText( Self, eContext, sourceSteamID, pchInputMessage, mempchOutFilteredText, (1024 * 32) );
 			pchOutFilteredText = Helpers.MemoryToString( mempchOutFilteredText );
 			return returnValue;
@@ -385,6 +385,40 @@ namespace Steamworks
 		{
 			var returnValue = _GetIPv6ConnectivityState( Self, eProtocol );
 			return returnValue;
+		}
+		
+		#region FunctionMeta
+		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamUtils_IsSteamRunningOnSteamDeck", CallingConvention = Platform.CC)]
+		[return: MarshalAs( UnmanagedType.I1 )]
+		private static extern bool _IsSteamRunningOnSteamDeck( IntPtr self );
+		
+		#endregion
+		internal bool IsSteamRunningOnSteamDeck()
+		{
+			var returnValue = _IsSteamRunningOnSteamDeck( Self );
+			return returnValue;
+		}
+		
+		#region FunctionMeta
+		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamUtils_ShowModalGamepadTextInput", CallingConvention = Platform.CC)]
+		[return: MarshalAs( UnmanagedType.I1 )]
+		private static extern bool _ShowModalGamepadTextInput( IntPtr self, GamepadTextInputLineMode eLineInputMode );
+		
+		#endregion
+		internal bool ShowModalGamepadTextInput( GamepadTextInputLineMode eLineInputMode )
+		{
+			var returnValue = _ShowModalGamepadTextInput( Self, eLineInputMode );
+			return returnValue;
+		}
+		
+		#region FunctionMeta
+		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamUtils_SetGameLauncherMode", CallingConvention = Platform.CC)]
+		private static extern void _SetGameLauncherMode( IntPtr self, [MarshalAs( UnmanagedType.U1 )] bool bLauncherMode );
+		
+		#endregion
+		internal void SetGameLauncherMode( [MarshalAs( UnmanagedType.U1 )] bool bLauncherMode )
+		{
+			_SetGameLauncherMode( Self, bLauncherMode );
 		}
 		
 	}

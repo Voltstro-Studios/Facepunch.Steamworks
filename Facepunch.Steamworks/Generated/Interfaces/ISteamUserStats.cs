@@ -361,9 +361,6 @@ namespace Steamworks
 		private static extern SteamAPICall_t _DownloadLeaderboardEntriesForUsers( IntPtr self, SteamLeaderboard_t hSteamLeaderboard, [In,Out] SteamId[]  prgUsers, int cUsers );
 		
 		#endregion
-		/// <summary>
-		/// Downloads leaderboard entries for an arbitrary set of users - ELeaderboardDataRequest is k_ELeaderboardDataRequestUsers
-		/// </summary>
 		internal CallResult<LeaderboardScoresDownloaded_t> DownloadLeaderboardEntriesForUsers( SteamLeaderboard_t hSteamLeaderboard, [In,Out] SteamId[]  prgUsers, int cUsers )
 		{
 			var returnValue = _DownloadLeaderboardEntriesForUsers( Self, hSteamLeaderboard, prgUsers, cUsers );
@@ -433,7 +430,7 @@ namespace Steamworks
 		#endregion
 		internal int GetMostAchievedAchievementInfo( out string pchName, ref float pflPercent, [MarshalAs( UnmanagedType.U1 )] ref bool pbAchieved )
 		{
-			IntPtr mempchName = Helpers.TakeMemory();
+			using var mempchName = Helpers.TakeMemory();
 			var returnValue = _GetMostAchievedAchievementInfo( Self, mempchName, (1024 * 32), ref pflPercent, ref pbAchieved );
 			pchName = Helpers.MemoryToString( mempchName );
 			return returnValue;
@@ -446,7 +443,7 @@ namespace Steamworks
 		#endregion
 		internal int GetNextMostAchievedAchievementInfo( int iIteratorPrevious, out string pchName, ref float pflPercent, [MarshalAs( UnmanagedType.U1 )] ref bool pbAchieved )
 		{
-			IntPtr mempchName = Helpers.TakeMemory();
+			using var mempchName = Helpers.TakeMemory();
 			var returnValue = _GetNextMostAchievedAchievementInfo( Self, iIteratorPrevious, mempchName, (1024 * 32), ref pflPercent, ref pbAchieved );
 			pchName = Helpers.MemoryToString( mempchName );
 			return returnValue;

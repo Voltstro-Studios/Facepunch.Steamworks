@@ -261,5 +261,38 @@ namespace Steamworks
 		/// Returns whether this steam client is a Steam China specific client, vs the global client
 		/// </summary>
 		public static bool IsSteamChinaLauncher => Internal.IsSteamChinaLauncher();
+
+		/// <summary>
+		/// Initializes text filtering, loading dictionaries for the language the game is running in.
+		/// Users can customize the text filter behavior in their Steam Account preferences
+		/// </summary>
+		public static bool InitFilterText() => Internal.InitFilterText( 0 );
+
+		/// <summary>
+		/// Filters the provided input message and places the filtered result into pchOutFilteredText,
+		/// using legally required filtering and additional filtering based on the context and user settings.
+		/// </summary>
+		public static string FilterText( TextFilteringContext context, SteamId sourceSteamID, string inputMessage )
+		{
+			Internal.FilterText( context, sourceSteamID, inputMessage, out var filteredString );
+			return filteredString;
+		}
+
+		/// <summary>
+		/// returns true if Steam itself is running on the Steam Deck
+		/// </summary>
+		public static bool IsRunningOnSteamDeck => Internal.IsSteamRunningOnSteamDeck();
+
+
+		/// <summary>
+		/// In game launchers that don't have controller support you can call this to have 
+		/// Steam Input translate the controller input into mouse/kb to navigate the launcher
+		/// </summary>
+		public static void SetGameLauncherMode( bool mode ) => Internal.SetGameLauncherMode( mode );
+
+		//public void ShowFloatingGamepadTextInput( TextInputMode mode, int left, int top, int width, int height )
+		//{
+		//	Internal.ShowFloatingGamepadTextInput( mode, left, top, width, height );
+		//}
 	}
 }
