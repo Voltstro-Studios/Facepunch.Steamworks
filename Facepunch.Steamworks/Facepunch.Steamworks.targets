@@ -1,37 +1,44 @@
 ﻿<Project>
-
+	
 	<PropertyGroup>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<PackageVersion>2.3.4</PackageVersion>
-    <FileVersion>2.3.4</FileVersion>
+		<Authors>Garry Newman</Authors>
+		<Copyright>Copyright (c) 2016 Facepunch Studios LTD</Copyright>
+		<Version>2.3.4</Version>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>9</LangVersion>
+		<RootNamespace>Steamworks</RootNamespace>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<PackageIcon>Facepunch.Steamworks.jpg</PackageIcon>
+		<PackageTags>facepunch;steam;unity;steamworks;valve</PackageTags>
+		<PackageProjectUrl>https://github.com/Facepunch/Facepunch.Steamworks</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageDescription>Steamworks implementation with an emphasis on making things easy.</PackageDescription>
+		<RepositoryUrl>https://github.com/Facepunch/Facepunch.Steamworks.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
 		<NoWarn>1701;1702;1705;618;1591</NoWarn>
+		<DebugType>full</DebugType>
+		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
 		<NoWarn>1701;1702;1705;618;1591</NoWarn>
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+		<Optimize>true</Optimize>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
-
-	<PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-		<DefineConstants>$(DefineConstants);NET_CORE</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-		<DebugType>full</DebugType>
-		<DebugSymbols>true</DebugSymbols>
-	</PropertyGroup>
-
+	
 	<ItemGroup>
-		<Compile Remove="*AssemblyInfo.cs" />
-		<Folder Include="Generated\Interfaces\" />
+		<None Include="Facepunch.Steamworks.jpg">
+			<Pack>true</Pack>
+			<PackagePath>/</PackagePath>
+		</None>
 	</ItemGroup>
   
 </Project>
